@@ -1,14 +1,50 @@
+<div align="center">
+
 # 🌙 Moon Note
 
-Moon Note is a small, self-hosted personal knowledge base with folders, `[[backlinks]]`, Markdown editing, a D3 knowledge graph, and a live moon-phase widget.
+**A lightweight, self-hosted personal knowledge base for connected notes.**
 
-It runs as a single Node.js web app and stores notes in one local JSON file. No database required.
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Storage](https://img.shields.io/badge/storage-JSON%20file-7C3AED)](#data-and-backups)
 
-## Quick install
+Moon Note combines Markdown, `[[wikilinks]]`, backlinks, folders, a visual knowledge graph, and a live moon-phase widget — all in a small Node.js app with no database to manage.
 
-### One-line install/run
+</div>
 
-Requires Git, Docker, and Docker Compose.
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation Options](#installation-options)
+  - [One-Line Installer](#one-line-installer)
+  - [Docker Compose](#docker-compose)
+  - [Node.js](#nodejs)
+- [Managing the App](#managing-the-app)
+- [Data and Backups](#data-and-backups)
+- [Configuration](#configuration)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [API Reference](#api-reference)
+- [Project Structure](#project-structure)
+- [License](#license)
+
+## Features
+
+| Feature | Description |
+| --- | --- |
+| **Markdown notes** | Write notes in Markdown with a live Write/Preview workflow. |
+| **Wikilinks** | Link notes with `[[Note Title]]` or `[[alias\|Note Title]]`. |
+| **Backlinks** | See which notes reference the note you are viewing. |
+| **Folders** | Organize notes by folder in the sidebar. |
+| **Knowledge graph** | Explore connections between notes with a D3-powered graph. |
+| **Moon phase widget** | Track the current lunar phase from inside the app. |
+| **Simple persistence** | Notes are stored in `data/notes.json`; no database required. |
+
+## Quick Start
+
+The fastest way to run Moon Note is with Docker:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/frostmute/moon-note/main/install.sh | bash
@@ -20,26 +56,43 @@ Then open:
 http://localhost:3000
 ```
 
-The installer clones Moon Note to:
+By default, the installer clones the app to:
 
 ```text
 ~/moon-note
 ```
 
-Your notes are stored at:
+## Installation Options
 
-```text
-~/moon-note/data/notes.json
+### One-Line Installer
+
+**Requirements:** Git, Docker, and Docker Compose.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/frostmute/moon-note/main/install.sh | bash
 ```
 
-### Custom install location or port
+The installer will:
+
+1. Clone or update the repository.
+2. Create the local `data/` directory if needed.
+3. Build and start the Docker container.
+4. Expose the app at `http://localhost:3000`.
+
+#### Custom directory or port
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/frostmute/moon-note/main/install.sh -o install.sh
 MOON_NOTE_DIR=/opt/moon-note PORT=8080 bash install.sh
 ```
 
-## Manual Docker install
+Then open:
+
+```text
+http://localhost:8080
+```
+
+### Docker Compose
 
 ```bash
 git clone https://github.com/frostmute/moon-note.git
@@ -53,26 +106,9 @@ Open:
 http://localhost:3000
 ```
 
-Useful commands:
+### Node.js
 
-```bash
-# View logs
-docker compose logs -f
-
-# Stop the app
-docker compose down
-
-# Start again
-docker compose up -d
-
-# Update
-git pull
-docker compose up -d --build
-```
-
-## Manual Node.js install
-
-Requires Node.js 18+.
+**Requirements:** Node.js 18+ and npm.
 
 ```bash
 git clone https://github.com/frostmute/moon-note.git
@@ -87,74 +123,119 @@ Open:
 http://localhost:3000
 ```
 
-You can change the port:
+## Managing the App
+
+From the Moon Note directory:
 
 ```bash
-PORT=8080 npm start
+# View logs
+docker compose logs -f
+
+# Stop the app
+docker compose down
+
+# Start the app
+docker compose up -d
+
+# Rebuild and restart
+docker compose up -d --build
+
+# Update to the latest version
+git pull
+docker compose up -d --build
 ```
 
-## Features
+If you used the installer, you can update by running:
 
-- **Folders** — group notes by folder in the sidebar.
-- **Backlinks** — write `[[Note Title]]` or `[[alias|Note Title]]` to connect notes.
-- **Markdown** — write Markdown with a live Write/Preview toggle.
-- **Knowledge graph** — visualize note relationships with D3.
-- **Live moon phase** — real lunar phase widget.
-- **No database** — notes persist to `data/notes.json`.
+```bash
+bash ~/moon-note/install.sh
+```
 
-## Backups
+## Data and Backups
 
-Back up this file regularly:
+Moon Note stores user notes in a single JSON file:
 
 ```text
 data/notes.json
 ```
 
-For a Docker install, from the app directory:
+For the default installer location, that file is:
+
+```text
+~/moon-note/data/notes.json
+```
+
+Back it up with:
 
 ```bash
+cd ~/moon-note
 cp data/notes.json moon-note-backup-$(date +%Y-%m-%d).json
 ```
 
-## Project layout
+> `data/notes.json` is intentionally ignored by Git so personal notes are not committed to the repository.
+
+## Configuration
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `PORT` | `3000` | Host port for the web app. |
+| `MOON_NOTE_DIR` | `~/moon-note` | Install directory used by `install.sh`. |
+| `MOON_NOTE_REPO_URL` | `https://github.com/frostmute/moon-note.git` | Repository URL used by `install.sh`. |
+
+Examples:
+
+```bash
+PORT=8080 docker compose up -d
+```
+
+```bash
+MOON_NOTE_DIR=/srv/moon-note PORT=8080 bash install.sh
+```
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl/Cmd + N` | Create a new note |
+| `Ctrl/Cmd + S` | Save the current note |
+| `Esc` | Close the graph view |
+
+## API Reference
+
+| Method | Route | Description |
+| --- | --- | --- |
+| `GET` | `/api/notes` | List all notes. |
+| `GET` | `/api/notes/:id` | Get one note with computed backlinks. |
+| `POST` | `/api/notes` | Create a note. |
+| `PUT` | `/api/notes/:id` | Update a note. |
+| `DELETE` | `/api/notes/:id` | Delete a note. |
+| `GET` | `/api/search?q=` | Search notes. |
+| `GET` | `/api/graph` | Get graph nodes and links. |
+| `GET` | `/api/stats` | Get note statistics. |
+
+## Project Structure
 
 ```text
 moon-note/
-  Dockerfile           container image definition
-  docker-compose.yml   easy self-hosted deployment
-  install.sh           one-line installer/updater
-  package.json         dependencies and start script
-  server.js            Express API and static host
-  store.js             JSON-file persistence and backlink/graph logic
-  data/notes.json      your notes, created on first launch
-  public/
-    index.html         app shell
-    css/style.css      theme/styles
-    js/app.js          app controller
-    js/markdown.js     Markdown and wikilinks
-    js/moonphase.js    lunar phase renderer
-    js/graph.js        D3 force-directed graph
+├── Dockerfile
+├── docker-compose.yml
+├── install.sh
+├── package.json
+├── server.js
+├── store.js
+├── data/
+│   └── notes.json          # created on first launch; ignored by Git
+└── public/
+    ├── index.html
+    ├── css/
+    │   └── style.css
+    └── js/
+        ├── app.js
+        ├── graph.js
+        ├── markdown.js
+        └── moonphase.js
 ```
-
-## API
-
-| Method | Route | Purpose |
-|--------|-------|---------|
-| GET | `/api/notes` | List all notes |
-| GET | `/api/notes/:id` | Get one note with backlinks |
-| POST | `/api/notes` | Create a note |
-| PUT | `/api/notes/:id` | Update a note |
-| DELETE | `/api/notes/:id` | Delete a note |
-| GET | `/api/search?q=` | Search notes |
-| GET | `/api/graph` | Graph nodes and links |
-| GET | `/api/stats` | Note statistics |
-
-## Shortcuts
-
-- `Ctrl/Cmd + N` — new note
-- `Ctrl/Cmd + S` — save
-- `Esc` — close graph view
 
 ## License
 
-Add your preferred license before publishing widely.
+No license has been selected yet. Add a license before distributing or accepting contributions widely.
