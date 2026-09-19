@@ -14,8 +14,15 @@ Moon Note combines Markdown, `[[wikilinks]]`, backlinks, folders, a visual knowl
 
 ---
 
+## Screenshots
+
+![Moon Note editor with folders, backlinks, and Markdown preview](assets/screenshots/moon-note-editor.png)
+
+![Moon Note knowledge graph view](assets/screenshots/moon-note-graph.png)
+
 ## Table of Contents
 
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Installation Options](#installation-options)
