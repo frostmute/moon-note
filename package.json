@@ -1,0 +1,13 @@
+{
+  "name": "moon-note",
+  "version": "1.0.0",
+  "description": "A wiki-style personal knowledge base with backlinks, Markdown, a D3 knowledge graph, and a live moon-phase widget.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
